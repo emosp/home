@@ -1,0 +1,53 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": {
+    "node": "^20.19.0 || >=22.12.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && $npm_execpath run docs:build",
+    "deploy": "$npm_execpath run build && wrangler deploy --var VERSION:$(git rev-parse --short HEAD)",
+    "docs:dev": "vitepress dev",
+    "docs:build": "vitepress build",
+    "docs:preview": "vitepress preview",
+    "migrate:generate": "drizzle-kit generate",
+    "migrate:prod": "wrangler d1 migrations apply emos --remote"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.12",
+    "@vueuse/core": "14.0.0-alpha.0",
+    "compressorjs": "^1.2.1",
+    "dayjs": "^1.11.15",
+    "drizzle-orm": "^0.44.5",
+    "hono": "^4.9.4",
+    "ky": "^1.9.1",
+    "naive-ui": "^2.42.0",
+    "pinia": "^3.0.3",
+    "pinia-plugin-persistedstate": "^4.5.0",
+    "tailwindcss": "^4.1.12",
+    "unplugin-auto-import": "^20.1.0",
+    "unplugin-vue-components": "^29.0.0",
+    "vue": "^3.5.20",
+    "vue-router": "^4.5.1",
+    "vue-turnstile": "^1.0.11"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.12.1",
+    "@tsconfig/node22": "^22.0.2",
+    "@types/node": "^22.18.0",
+    "@vicons/fa": "^0.13.0",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue-jsx": "^5.1.1",
+    "@vue/tsconfig": "^0.7.0",
+    "drizzle-kit": "^0.31.4",
+    "stylus": "^0.64.0",
+    "typescript": "~5.8.3",
+    "vite": "^7.1.3",
+    "vitepress": "2.0.0-alpha.12",
+    "vue-tsc": "^3.0.6",
+    "wrangler": "^4.33.1"
+  }
+}

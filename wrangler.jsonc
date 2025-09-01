@@ -1,0 +1,63 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "home",
+  "compatibility_date": "2025-08-26",
+  "main": "server/main.ts",
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "run_worker_first": [
+      "/server/*"
+    ]
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.8
+  },
+  "routes": [
+    {
+      "pattern": "emos.lol/",
+      "zone_name": "emos.lol"
+    },
+    {
+      "pattern": "emos.lol/favicon*",
+      "zone_name": "emos.lol"
+    },
+    {
+      "pattern": "emos.lol/robots.txt",
+      "zone_name": "emos.lol"
+    },
+    {
+      "pattern": "emos.lol/assets/*",
+      "zone_name": "emos.lol"
+    },
+    {
+      "pattern": "emos.lol/docs/*",
+      "zone_name": "emos.lol"
+    },
+    {
+      "pattern": "emos.lol/server/*",
+      "zone_name": "emos.lol"
+    }
+  ],
+  "vars": {
+    "VIDEO_PLAY_TYPE_R2_URL": "https://emos.lol/files"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "emos",
+      "database_id": "d733cdb9-67c8-4c5b-a5f7-e794e53ed7a1",
+      "migrations_dir": "./drizzle"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "R2",
+      "bucket_name": "files"
+    }
+  ]
+}

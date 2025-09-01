@@ -1,0 +1,34 @@
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.worker.json"
+    }
+  ],
+  "include": [
+    "web/**/*.ts",
+    "web/**/*.tsx",
+    "web/**/*.vue",
+    "server/**/*.ts"
+  ],
+  "compilerOptions": {
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.tsbuildinfo",
+    "paths": {
+      "@/*": [
+        "./web/*"
+      ],
+      "@common/*": [
+        "./common/*"
+      ],
+      "@server/*": [
+        "./server/*"
+      ]
+    }
+  }
+}
