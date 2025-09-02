@@ -44,7 +44,7 @@
     }
   ],
   "vars": {
-    "VIDEO_PLAY_TYPE_R2_URL": "https://emos.lol/files"
+    "VIDEO_PLAY_TYPE_R2_URL": "https://emos.lol"
   },
   "d1_databases": [
     {
