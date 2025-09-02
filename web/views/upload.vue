@@ -15,7 +15,7 @@
         </n-button>
       </template>
       <template #default>
-        <n-form ref="form_ref" :model="form_data" :rules="form_rules" label-placement="left" label-width="auto">
+        <n-form ref="form_ref" :model="form_data" :rules="form_rules" label-placement="left" :label-width="70">
           <n-form-item label="媒体库" path="library_uuid">
             <n-select
               v-model:value="form_data.library_uuid"
@@ -27,7 +27,30 @@
               filterable
               clearable />
           </n-form-item>
-          <n-form-item label="资源名" v-show="form_data.library_type">
+          <template v-if="is_public_movie">
+            <n-form-item label="资源名" path="movie_name">
+              <n-input v-model:value="form_data.movie_name" type="text" placeholder="请输入资源名" :maxlength="50" clearable />
+            </n-form-item>
+            <n-form-item label="简介" path="movie_description">
+              <n-input v-model:value="form_data.movie_description" type="textarea" placeholder="请输入描述啥的" :maxlength="200" show-count clearable />
+            </n-form-item>
+            <n-form-item label="封面图" path="movie_poster" v-if="form_data.movie_name">
+              <n-upload
+                :max="1"
+                accept="image/*"
+                @update-file-list="
+                  (file_lists) => {
+                    form_data.movie_poster = file_lists[0]?.fullPath
+                  }
+                "
+                :custom-request="uploadFileRequest"
+                list-type="image-card">
+                点击上传
+              </n-upload>
+            </n-form-item>
+          </template>
+
+          <n-form-item v-if="!is_public_movie" label="资源名" v-show="form_data.library_type">
             <n-grid :cols="24" item-responsive>
               <n-form-item-gi path="search_type" span="24 400:6">
                 <n-switch v-model:value="form_data.search_type" checked-value="tmdb_id" unchecked-value="name" @change="resetMediaData('search_type')">
@@ -86,7 +109,7 @@
             </n-form-item>
           </template>
 
-          <n-form-item label="分辨率" path="resolution" v-show="form_data.library_type">
+          <n-form-item label="分辨率" path="resolution" v-show="form_data.library_type && !is_public_movie">
             <n-select
               v-model:value="form_data.resolution"
               placeholder="请选择上传资源分辨率"
@@ -96,9 +119,17 @@
               filterable />
           </n-form-item>
 
-          <n-form-item path="path_url" v-if="form_data.resolution">
-            <!--             accept="video/*"-->
-            <n-upload directory-dnd :max="1" @update:file-list="changeFileList" :custom-request="uploadFileRequest">
+          <n-form-item path="path_url" v-if="form_data.library_type">
+            <n-upload
+              directory-dnd
+              :max="1"
+              accept="video/*"
+              @update:file-list="
+                (file_lists) => {
+                  form_data.path_url = file_lists[0]?.fullPath
+                }
+              "
+              :custom-request="uploadFileRequest">
               <n-upload-dragger>
                 <div class="mt-4">
                   <n-icon size="48" :depth="3">
@@ -106,7 +137,7 @@
                   </n-icon>
                 </div>
                 <n-text style="font-size: 16px"> 点击或者拖动视频文件到该区域来上传 </n-text>
-                <n-p depth="3" class="mt-8"> 上传测试库可以实时看到 其他库需要等审核后入库 </n-p>
+                <n-p depth="3" class="mt-8"> 上传公开库可以实时看到 其他库需要等审核后方可入库 </n-p>
               </n-upload-dragger>
             </n-upload>
           </n-form-item>
@@ -119,19 +150,22 @@
 <script setup lang="ts">
   import { Upload } from '@vicons/fa'
   import { useDebounceFn } from '@vueuse/core'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
   import instance from '@/utils/ky'
   import { uploadFileRequest } from '@/utils/file'
 
   import { useRouter } from 'vue-router'
-  import { FormInst, FormRules, UploadFileInfo } from 'naive-ui'
+  import { FormInst, FormRules } from 'naive-ui'
   import { nMessage, nNotification } from '@/utils/naive'
   const router = useRouter()
+
+  const is_public_movie = computed(() => form_data.value.library_role == 'public_movie')
 
   const form_ref = ref<FormInst | null>(null),
     form_data = ref({
       library_uuid: null,
       library_type: null,
+      library_role: null,
       search_type: 'name',
       search_value: null,
       tmdb_id: null,
@@ -194,6 +228,14 @@
           message: '需要上传视频或输入地址呀',
         },
       ],
+      movie_name: [
+        {
+          required: true,
+          trigger: ['input'],
+          type: 'string',
+          message: '',
+        },
+      ],
     },
     form_loading = ref(false),
     formSubmit = async () => {
@@ -205,12 +247,16 @@
       instance
         .post('/api/upload/save', {
           json: {
+            library_role: data.library_role,
             tmdb_id: data.tmdb_id,
             library_uuid: data.library_uuid,
             season_number: data.season_number,
             episode_number: data.episode_number,
             path_url: data.path_url,
             resolution: data.resolution,
+            movie_name: data.movie_name,
+            movie_description: data.movie_description,
+            movie_poster: data.movie_poster,
           },
         })
         .then(async (res) => {
@@ -244,6 +290,14 @@
         ...data,
         resolutions,
       }
+
+      for (let library of data.libraries) {
+        if (library.role == 'public_movie') {
+          form_data.value.library_uuid = library.uuid
+          changeLibrary(library.uuid, library)
+          break
+        }
+      }
     }
 
   getBase()
@@ -257,13 +311,17 @@
         search_media_episode_options.value = []
         form_data.value.library_uuid = null
         form_data.value.library_type = null
-        form_data.value.search_type = null
+        form_data.value.library_role = null
+        form_data.value.search_type = 'name'
         form_data.value.search_value = null
         form_data.value.tmdb_id = null
         form_data.value.season_number = null
         form_data.value.episode_number = null
         form_data.value.resolution = null
         form_data.value.path_url = null
+        form_data.value.movie_name = null
+        form_data.value.movie_description = null
+        form_data.value.movie_poster = null
         break
       case 'search_type':
         form_data.value.search_value = null
@@ -273,6 +331,7 @@
         search_media_options.value = []
         search_media_season_options.value = []
         search_media_episode_options.value = []
+        form_data.value.library_type = null
         form_data.value.search_value = null
         form_data.value.tmdb_id = null
         form_data.value.season_number = null
@@ -297,6 +356,11 @@
   const changeLibrary = (value, option) => {
     resetMediaData('library')
     form_data.value.library_type = option?.type
+    form_data.value.library_role = option?.role
+
+    if (is_public_movie.value) {
+      form_data.value.resolution = 'other'
+    }
   }
 
   const search_media_options = ref([]),
@@ -380,9 +444,5 @@
         return item
       })
     }
-
-  const changeFileList = (file_lists: Array<UploadFileInfo>) => {
-    form_data.value.path_url = file_lists[0]?.fullPath
-  }
 </script>
 <style scoped lang="stylus"></style>
