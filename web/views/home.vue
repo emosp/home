@@ -48,7 +48,18 @@
         </n-list-item>
       </n-list>
       <template #footer>
-        <n-collapse>
+        <n-collapse @update:expanded-names="collapseExpanded" accordion>
+          <n-collapse-item title="资源库" name="library">
+            <n-list>
+              <n-list-item v-for="row in library_datas" :key="row.library_uuid">
+                <n-thing :title="row.name">
+                  <template #header-extra>
+                    <n-switch :value="row.is_select" :loading="row.loading" @update:value="librarySwitch(row)" />
+                  </template>
+                </n-thing>
+              </n-list-item>
+            </n-list>
+          </n-collapse-item>
           <n-collapse-item title="常见问题" name="qa">
             <n-list>
               <n-list-item>
@@ -88,6 +99,7 @@
   import { useRouter } from 'vue-router'
   import instance from '@/utils/ky'
   import signStore from '@/stores/sign.ts'
+  import { nMessage } from '@/utils/naive'
 
   const storeSign = signStore(),
     router = useRouter()
@@ -101,5 +113,32 @@
     }
 
   getData()
+
+  const library_datas = ref([]),
+    libraryGet = async () => {
+      let data = await instance.get('/api/library').json()
+      library_datas.value = data.libraries
+    },
+    librarySwitch = async (row) => {
+      row.loading = true
+      nMessage().info(`正在切换 ${row.name} 可见状态`)
+      let is_select = !row.is_select
+      await instance.put('/api/library', {
+        json: {
+          library_uuid: row.library_uuid,
+          is_select,
+        },
+      })
+      
+      row.is_select = is_select
+      row.loading = false
+    }
+
+  const collapseExpanded = (expanded_names?: array) => {
+    if (expanded_names.includes('library') && !library_datas.value.length) {
+      nMessage().info('加载资源库中')
+      libraryGet()
+    }
+  }
 </script>
 <style scoped lang="stylus"></style>
