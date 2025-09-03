@@ -90,28 +90,6 @@
             text
             onClick={() => {
               router.push({
-                name: 'Home',
-              })
-            }}>
-            {{
-              default: () => '控制台',
-              icon: () => (
-                <n-icon>
-                  <Home />
-                </n-icon>
-              ),
-            }}
-          </n-button>
-        ),
-        key: 'home',
-        show: computed(() => storeSign.is_sign),
-      },
-      {
-        label: () => (
-          <n-button
-            text
-            onClick={() => {
-              router.push({
                 name: 'Upload',
               })
             }}>
@@ -126,6 +104,28 @@
           </n-button>
         ),
         key: 'upload',
+        show: computed(() => storeSign.is_sign),
+      },
+      {
+        label: () => (
+          <n-button
+            text
+            onClick={() => {
+              router.push({
+                name: 'Home',
+              })
+            }}>
+            {{
+              default: () => '控制台',
+              icon: () => (
+                <n-icon>
+                  <Home />
+                </n-icon>
+              ),
+            }}
+          </n-button>
+        ),
+        key: 'home',
         show: computed(() => storeSign.is_sign),
       },
       {

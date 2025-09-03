@@ -123,7 +123,7 @@
             <n-upload
               directory-dnd
               :max="1"
-              accept="video/*"
+              accept="video/*,.mkv"
               @update:file-list="
                 (file_lists) => {
                   form_data.path_url = file_lists[0]?.fullPath
