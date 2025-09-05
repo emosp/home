@@ -60,6 +60,18 @@
               </n-list-item>
             </n-list>
           </n-collapse-item>
+          <n-collapse-item title="切换线路" name="line">
+            <n-radio-group v-model:value="line_datas.selected" name="line" @change="lineSwitch">
+              <div>
+                <n-radio value="default"> 默认 (无cf优选) </n-radio>
+              </div>
+              <div v-for="line in line_datas.lines" :key="line">
+                <n-radio :value="line">
+                  {{ line }}
+                </n-radio>
+              </div>
+            </n-radio-group>
+          </n-collapse-item>
           <n-collapse-item title="常见问题" name="qa">
             <n-list>
               <n-list-item>
@@ -129,15 +141,39 @@
           is_select,
         },
       })
-      
+
       row.is_select = is_select
       row.loading = false
+    }
+
+  const line_datas = ref({
+      lines: [],
+      selected: null,
+    }),
+    lineGet = async () => {
+      line_datas.value = await instance.get('/api/line').json()
+    },
+    lineSwitch = async () => {
+      let line = line_datas.value.selected
+      await instance
+        .put('/api/line', {
+          json: {
+            line,
+          },
+        })
+        .then(() => {
+          nMessage().success(`已在切换为 ${line} 线路 重新进视频详情页播放即可`)
+        })
     }
 
   const collapseExpanded = (expanded_names?: array) => {
     if (expanded_names.includes('library') && !library_datas.value.length) {
       nMessage().info('加载资源库中')
       libraryGet()
+    }
+    if (expanded_names.includes('line') && !line_datas.value.lines.length) {
+      nMessage().info('加载线路中')
+      lineGet()
     }
   }
 </script>

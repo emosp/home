@@ -19,6 +19,7 @@ emby.get('/videoRequest', async (c) => {
     emos_data: {
       type: string
       url: string
+      line: string
       time: number
     } = {}
 
@@ -47,7 +48,8 @@ emby.get('/videoRequest', async (c) => {
 
   switch (emos_data.type) {
     case 'r2':
-      play_url = `${c.env.VIDEO_PLAY_TYPE_R2_URL}${emos_url}`
+      let user_line = emos_data.line
+      play_url = user_line == 'default' ? `${c.env.VIDEO_PLAY_TYPE_R2_URL}${emos_url}` : `https://cdn-${user_line}.emos.lol${emos_url}`
       break
 
     case 'url':
