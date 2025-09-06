@@ -35,25 +35,22 @@ export const UploadFile = (
       })
       .json()
 
-    /**
-     * todo: 上传进度 找到方案或替换为xhr
-     * https://github.com/sindresorhus/ky/issues/727
-     */
-    upload_progress(50)
-    ky.put(data.upload_url, {
-      timeout: false,
-      body: file,
-      retry: 1,
+    let xhr = new XMLHttpRequest()
+    xhr.timeout = 0
+    xhr.upload.addEventListener('progress', (ev) => {
+      if (ev.lengthComputable) {
+        upload_progress(((ev.loaded / ev.total) * 90).toFixed(2))
+      }
     })
-      .then(() => {
-        resolve({
-          path: data.path,
-        })
-      })
-      .catch((err) => {
-        console.error(err)
-        reject(err)
-      })
+    xhr.addEventListener('load', () =>
+      resolve({
+        path: data.path,
+      }),
+    )
+    xhr.addEventListener('error', (err) => reject(err))
+
+    xhr.open('put', data.upload_url)
+    xhr.send(compressor_file)
   })
 
 export const uploadFileRequest = async (options: UploadCustomRequestOptions) => {
