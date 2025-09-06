@@ -8,7 +8,20 @@
     :bordered="false"
     title="登录 / 注册"
     content-style="padding: 10px">
-    <template #footer>未注册的账号将自动注册</template>
+    <template #footer>
+      <p>未注册的账号将自动注册</p>
+
+      <n-divider dashed> 或 </n-divider>
+
+      <div class="mb-1" v-for="oauth in Oauths" :key="oauth.type">
+        <n-button block secondary strong tag="a" :href="oauth.url">
+          <template #icon>
+            <img :src="oauth.logo" />
+          </template>
+          用 {{ oauth.label }} 登录
+        </n-button>
+      </div>
+    </template>
     <n-form ref="form_ref" :model="form_data" :rules="form_rules">
       <n-form-item label="账号" path="username">
         <n-input v-model:value="form_data.username" placeholder="请输入账号" clearable @change="getHasUsername" />
@@ -29,6 +42,7 @@
   import { FormInst, FormRules, FormItemRule } from 'naive-ui'
   import instance from '@/utils/ky'
   import { nMessage } from '@/utils/naive'
+  import { Oauths } from '@/utils/oauth'
 
   import { useRoute, useRouter } from 'vue-router'
   const router = useRouter(),
@@ -166,4 +180,8 @@
     }
   }
 </script>
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+  .n-divider
+      margin-top: 4px
+      margin-bottom: 8px
+</style>

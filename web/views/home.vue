@@ -72,6 +72,27 @@
               </div>
             </n-radio-group>
           </n-collapse-item>
+          <n-collapse-item title="绑定账号" name="oauth">
+            <div class="mb-1" v-for="oauth in Oauths" :key="oauth.type">
+              <n-popconfirm v-if="oauth_datas[oauth.type]" @positive-click="oauthUnbind(oauth.type)">
+                <template #trigger>
+                  <n-button block secondary strong>
+                    <template #icon>
+                      <img :src="oauth.logo" />
+                    </template>
+                    解绑 {{ oauth.label }} # {{ oauth_datas[oauth.type] }}
+                  </n-button>
+                </template>
+                确认解绑?
+              </n-popconfirm>
+              <n-button v-else block secondary strong tag="a" :href="oauth.url">
+                <template #icon>
+                  <img :src="oauth.logo" />
+                </template>
+                绑定 {{ oauth.label }}
+              </n-button>
+            </div>
+          </n-collapse-item>
           <n-collapse-item title="常见问题" name="qa">
             <n-list>
               <n-list-item>
@@ -112,6 +133,7 @@
   import instance from '@/utils/ky'
   import signStore from '@/stores/sign.ts'
   import { nMessage } from '@/utils/naive'
+  import { Oauths } from '@/utils/oauth'
 
   const storeSign = signStore(),
     router = useRouter()
@@ -166,6 +188,23 @@
         })
     }
 
+  const oauth_datas = ref({}),
+    oauthGet = async () => {
+      oauth_datas.value = await instance.get('/api/oauth').json()
+    },
+    oauthUnbind = async (type: string) => {
+      await instance
+        .delete('/api/oauth/unbind', {
+          json: {
+            type,
+          },
+        })
+        .then(() => {
+          nMessage().success('解绑成功')
+          delete oauth_datas.value[type]
+        })
+    }
+
   const collapseExpanded = (expanded_names?: array) => {
     if (expanded_names.includes('library') && !library_datas.value.length) {
       nMessage().info('加载资源库中')
@@ -174,6 +213,10 @@
     if (expanded_names.includes('line') && !line_datas.value.lines.length) {
       nMessage().info('加载线路中')
       lineGet()
+    }
+    if (expanded_names.includes('oauth') && !Object.keys(oauth_datas.value).length) {
+      nMessage().info('加载账号中')
+      oauthGet()
     }
   }
 </script>

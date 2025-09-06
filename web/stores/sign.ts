@@ -49,6 +49,8 @@ export default defineStore(
     }
   },
   {
-    persist: true,
+    persist: {
+      pick: ['user_token', 'user_username'],
+    },
   },
 )
