@@ -78,7 +78,8 @@
                 <template #trigger>
                   <n-button block secondary strong>
                     <template #icon>
-                      <img :src="oauth.logo" />
+                      <component v-if="oauth.logo_component" :is="oauth.logo_component" />
+                      <img v-else :src="oauth.logo" />
                     </template>
                     解绑 {{ oauth.label }} # {{ oauth_datas[oauth.type] }}
                   </n-button>
@@ -87,7 +88,8 @@
               </n-popconfirm>
               <n-button v-else block secondary strong tag="a" :href="oauth.url">
                 <template #icon>
-                  <img :src="oauth.logo" />
+                  <component v-if="oauth.logo_component" :is="oauth.logo_component" />
+                  <img v-else :src="oauth.logo" />
                 </template>
                 绑定 {{ oauth.label }}
               </n-button>
