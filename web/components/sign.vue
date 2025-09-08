@@ -16,7 +16,8 @@
       <div class="mb-1" v-for="oauth in Oauths" :key="oauth.type">
         <n-button block secondary strong tag="a" :href="oauth.url">
           <template #icon>
-            <img :src="oauth.logo" />
+            <component v-if="oauth.logo_component" :is="oauth.logo_component" />
+            <img v-else :src="oauth.logo" />
           </template>
           用 {{ oauth.label }} 登录
         </n-button>
