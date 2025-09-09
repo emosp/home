@@ -8,7 +8,7 @@ const emby = new Hono()
  * todo: 缓存
  */
 emby.get('/videoRequest', async (c) => {
-  let body = c.req.query('emos_data')
+  let body = c.req.query('emos_data_cf')
   if (!body) {
     return c.text('error emos_data', 400)
   }
@@ -54,10 +54,6 @@ emby.get('/videoRequest', async (c) => {
 
     case 'url':
       play_url = emos_url
-      break
-
-    case 'external_zn':
-      play_url = `${c.env.VIDEO_PLAY_TYPE_EXTERNAL_ZN_URL}${emos_url}`
       break
 
     default:
