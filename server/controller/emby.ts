@@ -56,6 +56,10 @@ emby.get('/videoRequest', async (c) => {
       play_url = emos_url
       break
 
+    case 'external_zn':
+      play_url = `${c.env.VIDEO_PLAY_TYPE_EXTERNAL_ZN_URL}${emos_url}`
+      break
+
     default:
       break
   }

@@ -44,7 +44,8 @@
     }
   ],
   "vars": {
-    "VIDEO_PLAY_TYPE_R2_URL": "https://emos.lol"
+    "VIDEO_PLAY_TYPE_R2_URL": "https://emos.lol",
+    "VIDEO_PLAY_TYPE_EXTERNAL_ZN_URL": "https://pan.8897122.xyz"
   },
   "d1_databases": [
     {

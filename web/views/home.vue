@@ -21,8 +21,13 @@
           </code>
         </template>
         <template #footer>
-          求片或意见反馈等请提
-          <n-button text tag="a" href="http://github.com/emosp/home/issues" target="_blank"> issues </n-button>
+          <p>
+            求片或意见反馈等请提
+            <n-button text tag="a" href="http://github.com/emosp/home/issues" target="_blank"> issues </n-button>
+          </p>
+          <p class="mt-1">
+            感谢 <n-button text tag="a" href="https://pan.8897122.xyz/" target="_blank"> <span class="font-bold">Zn存档服</span> </n-button> 大力支持
+          </p>
         </template>
         <n-list-item>
           <n-thing>
