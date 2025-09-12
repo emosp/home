@@ -38,6 +38,9 @@ const instance = ky.create({
           case 500:
             nMessage().error('系统错误 请稍后再试')
             break
+          case 502:
+            nMessage().error('系统维护中 请过会再试')
+            break
         }
 
         if (response.ok) {
