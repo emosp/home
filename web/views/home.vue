@@ -28,6 +28,9 @@
           <p class="mt-1">
             感谢 <n-button text tag="a" href="https://pan.8897122.xyz/" target="_blank"> <span class="font-bold">Zn存档服</span> </n-button> 大力支持
           </p>
+          <p class="mt-1">
+            感谢 <n-button text tag="a" href="https://t.me/nyamedia_chat" target="_blank"> <span class="font-bold">Nya</span> </n-button> 大力支持
+          </p>
         </template>
         <n-list-item>
           <n-thing>
@@ -56,7 +59,7 @@
         <n-collapse @update:expanded-names="collapseExpanded" accordion>
           <n-collapse-item title="资源库" name="library">
             <n-list>
-              <n-list-item v-for="row in library_datas" :key="row.library_uuid">
+              <n-list-item v-for="row in library_datas" :key="row.library_id">
                 <n-thing :title="row.name">
                   <template #header-extra>
                     <n-switch :value="row.is_select" :loading="row.loading" @update:value="librarySwitch(row)" />
@@ -64,18 +67,6 @@
                 </n-thing>
               </n-list-item>
             </n-list>
-          </n-collapse-item>
-          <n-collapse-item title="切换线路" name="line">
-            <n-radio-group v-model:value="line_datas.selected" name="line" @change="lineSwitch">
-              <div>
-                <n-radio value="default"> 默认 (无cf优选) </n-radio>
-              </div>
-              <div v-for="line in line_datas.lines" :key="line">
-                <n-radio :value="line">
-                  {{ line }}
-                </n-radio>
-              </div>
-            </n-radio-group>
           </n-collapse-item>
           <n-collapse-item title="绑定账号" name="oauth">
             <div class="mb-1" v-for="oauth in Oauths" :key="oauth.type">
@@ -166,33 +157,13 @@
       let is_select = !row.is_select
       await instance.put('/api/library', {
         json: {
-          library_uuid: row.library_uuid,
+          library_id: row.library_id,
           is_select,
         },
       })
 
       row.is_select = is_select
       row.loading = false
-    }
-
-  const line_datas = ref({
-      lines: [],
-      selected: null,
-    }),
-    lineGet = async () => {
-      line_datas.value = await instance.get('/api/line').json()
-    },
-    lineSwitch = async () => {
-      let line = line_datas.value.selected
-      await instance
-        .put('/api/line', {
-          json: {
-            line,
-          },
-        })
-        .then(() => {
-          nMessage().success(`已在切换为 ${line} 线路 重新进视频详情页播放即可`)
-        })
     }
 
   const oauth_datas = ref({}),
@@ -216,10 +187,6 @@
     if (expanded_names.includes('library') && !library_datas.value.length) {
       nMessage().info('加载资源库中')
       libraryGet()
-    }
-    if (expanded_names.includes('line') && !line_datas.value.lines.length) {
-      nMessage().info('加载线路中')
-      lineGet()
     }
     if (expanded_names.includes('oauth') && !Object.keys(oauth_datas.value).length) {
       nMessage().info('加载账号中')

@@ -12,16 +12,13 @@
     "deploy": "$npm_execpath run build && wrangler deploy --var VERSION:$(git rev-parse --short HEAD)",
     "docs:dev": "vitepress dev",
     "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview",
-    "migrate:generate": "drizzle-kit generate",
-    "migrate:prod": "wrangler d1 migrations apply emos --remote"
+    "docs:preview": "vitepress preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.12",
     "@vueuse/core": "14.0.0-alpha.0",
     "compressorjs": "^1.2.1",
     "dayjs": "^1.11.15",
-    "drizzle-orm": "^0.44.5",
     "hono": "^4.9.4",
     "ky": "^1.9.1",
     "naive-ui": "^2.42.0",
@@ -42,7 +39,6 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "@vitejs/plugin-vue-jsx": "^5.1.1",
     "@vue/tsconfig": "^0.7.0",
-    "drizzle-kit": "^0.31.4",
     "stylus": "^0.64.0",
     "typescript": "~5.8.3",
     "vite": "^7.1.3",
