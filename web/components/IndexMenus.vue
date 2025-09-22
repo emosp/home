@@ -104,7 +104,7 @@
           </n-button>
         ),
         key: 'upload',
-        show: computed(() => storeSign.is_sign),
+        show: false,
       },
       {
         label: () => (

@@ -5,7 +5,7 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "home",
-  "compatibility_date": "2025-08-26",
+  "compatibility_date": "2025-09-22",
   "main": "server/main.ts",
   "assets": {
     "not_found_handling": "single-page-application",
@@ -41,17 +41,6 @@
     {
       "pattern": "emos.lol/server/*",
       "zone_name": "emos.lol"
-    }
-  ],
-  "vars": {
-    "VIDEO_PLAY_TYPE_R2_URL": "https://emos.lol"
-  },
-  "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "emos",
-      "database_id": "d733cdb9-67c8-4c5b-a5f7-e794e53ed7a1",
-      "migrations_dir": "./drizzle"
     }
   ],
   "r2_buckets": [
