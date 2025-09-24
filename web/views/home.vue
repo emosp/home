@@ -31,6 +31,9 @@
           <p class="mt-1">
             感谢 <n-button text tag="a" href="https://t.me/nyamedia_chat" target="_blank"> <span class="font-bold">Nya</span> </n-button> 大力支持
           </p>
+          <p class="mt-1">
+            感谢 <n-button text tag="a" href="https://t.me/yangzhazha_bot" target="_blank"> <span class="font-bold">杨渣渣</span> </n-button> 大力支持
+          </p>
         </template>
         <n-list-item>
           <n-thing>
