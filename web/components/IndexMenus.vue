@@ -14,7 +14,7 @@
   import signStore from '@/stores/sign.ts'
   const storeSign = signStore()
 
-  import { Github, WikipediaW, TelegramPlane, User, Home, Upload, SignOutAlt } from '@vicons/fa'
+  import { Github, WikipediaW, TelegramPlane, User, Home, Upload, SignOutAlt, Dove } from '@vicons/fa'
   import type { MenuOption } from 'naive-ui'
   const menu = ref(),
     options: MenuOption[] = ref([
@@ -105,6 +105,28 @@
         ),
         key: 'upload',
         show: false,
+      },
+      {
+        label: () => (
+          <n-button
+            text
+            onClick={() => {
+              router.push({
+                name: 'Favorite',
+              })
+            }}>
+            {{
+              default: () => '求片列表',
+              icon: () => (
+                <n-icon>
+                  <Dove />
+                </n-icon>
+              ),
+            }}
+          </n-button>
+        ),
+        key: 'home',
+        show: computed(() => storeSign.is_sign),
       },
       {
         label: () => (

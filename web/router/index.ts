@@ -24,6 +24,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/upload.vue'),
   },
   {
+    path: '/favorite',
+    name: 'Favorite',
+    component: () => import('@/views/favorite.vue'),
+  },
+  {
     path: '/oauth/:type',
     name: ROUTE_NAME_OAUTH,
     component: () => import('@/views/oauth.vue'),
