@@ -1,5 +1,5 @@
 import logo_linuxdo from '@/assets/logo/linuxdo.webp'
-import { Github, Google } from '@vicons/fa'
+import { Github, Google, Telegram } from '@vicons/fa'
 
 export const ToSignUrl = (name) => `/api/sign/to/${name}`
 
@@ -27,5 +27,11 @@ export const Oauths: Array<{
     logo_component: Google,
     label: 'Google',
     url: ToSignUrl('google'),
+  },
+  {
+    type: 'telegram',
+    logo_component: Telegram,
+    label: 'Telegram',
+    url: ToSignUrl('telegram'),
   },
 ]
