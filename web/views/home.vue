@@ -247,14 +247,14 @@
     },{
       validator: confirmValidator,
       message: '两次密码输入不一致',
-      trigger: 'input'
+      trigger: ['input', 'blur']
     }]
   })
   
   const submitPwd = () => {
     formRef.value?.validate((errors) => {
       if (!errors) {
-        instance.put('', {
+        instance.post('/api/user/changePassword', {
           json: {
             password: pwdForm.password
           }
