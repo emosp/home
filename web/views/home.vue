@@ -162,8 +162,6 @@
   import signStore from '@/stores/sign.ts'
   import { nMessage } from '@/utils/naive'
   import { Oauths } from '@/utils/oauth'
-  // import {useMessage} from 'naive-ui'
-  // const message = useMessage()
   const storeSign = signStore(),
     router = useRouter()
 
@@ -222,6 +220,10 @@
     if (expanded_names.includes('oauth') && !Object.keys(oauth_datas.value).length) {
       nMessage().info('加载账号中')
       oauthGet()
+    }
+    if(expanded_names.includes('updatePassword')){
+      pwdForm.password = ''
+      pwdForm.confirmPwd = ''
     }
   }
 
