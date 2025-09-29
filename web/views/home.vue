@@ -123,19 +123,47 @@
               </n-list-item>
             </n-list>
           </n-collapse-item>
+          <n-collapse-item title="修改密码" name="updatePassword">
+            <n-space vertical style="max-width: 400px;">
+              <n-form ref="formRef" :model="pwdForm" :rules="pwdRules">
+                <n-form-item label="新密码" path="password">
+                  <n-input
+                    type="password"
+                    v-model:value="pwdForm.password"
+                    show-password-on="click"
+                    placeholder="新密码"
+                  />
+                </n-form-item>
+                <n-form-item label="确认密码" path="confirmPwd">
+                  <n-input
+                    type="password"
+                    v-model:value="pwdForm.confirmPwd"
+                    show-password-on="click"
+                    placeholder="确认密码"
+                  />
+                </n-form-item>
+                <n-form-item>
+                  <n-button type="tertiary" @click="submitPwd">
+                    提交
+                  </n-button>
+                </n-form-item>
+              </n-form>  
+            </n-space>
+          </n-collapse-item>
         </n-collapse>
       </template>
     </n-card>
   </div>
 </template>
 <script setup lang="ts">
-  import { ref } from 'vue'
+  import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import instance from '@/utils/ky'
   import signStore from '@/stores/sign.ts'
   import { nMessage } from '@/utils/naive'
   import { Oauths } from '@/utils/oauth'
-
+  // import {useMessage} from 'naive-ui'
+  // const message = useMessage()
   const storeSign = signStore(),
     router = useRouter()
 
@@ -196,5 +224,48 @@
       oauthGet()
     }
   }
+
+  // 修改密码
+  const formRef = ref(null)
+  const pwdForm = reactive({
+    password: '',
+    confirmPwd: '',
+  })
+  const confirmValidator = (rule, value: string) => {
+    return value === pwdForm.password
+  }
+  const pwdRules = reactive({
+    password: [{
+      required: true,
+      message: '请输入新密码',
+      trigger: 'blur'
+    }],
+    confirmPwd: [{
+      required: true,
+      message: '请确认新密码',
+      trigger: 'blur'
+    },{
+      validator: confirmValidator,
+      message: '两次密码输入不一致',
+      trigger: 'input'
+    }]
+  })
+  
+  const submitPwd = () => {
+    formRef.value?.validate((errors) => {
+      if (!errors) {
+        instance.put('', {
+          json: {
+            password: pwdForm.password
+          }
+        }).then(res => {
+          nMessage().success('密码修改成功')
+          console.log(res);
+          
+        })
+      }
+    })
+  }
+  // 修改密码
 </script>
 <style scoped lang="stylus"></style>
