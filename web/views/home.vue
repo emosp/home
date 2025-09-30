@@ -125,12 +125,13 @@
           </n-collapse-item>
           <n-collapse-item title="修改密码" name="updatePassword">
             <n-space vertical style="max-width: 400px;">
-              <n-form ref="formRef" :model="pwdForm" :rules="pwdRules">
+              <n-form ref="passwordFormRef" :model="pwdForm" :rules="pwdRules">
                 <n-form-item label="新密码" path="password">
                   <n-input
                     type="password"
                     v-model:value="pwdForm.password"
                     show-password-on="click"
+                    clearable
                     placeholder="新密码"
                   />
                 </n-form-item>
@@ -139,11 +140,12 @@
                     type="password"
                     v-model:value="pwdForm.confirmPwd"
                     show-password-on="click"
+                    clearable
                     placeholder="确认密码"
                   />
                 </n-form-item>
                 <n-form-item>
-                  <n-button type="tertiary" @click="submitPwd">
+                  <n-button type="tertiary" :loading="passwordSubmitting" @click="submitPwd">
                     提交
                   </n-button>
                 </n-form-item>
@@ -228,15 +230,13 @@
   }
 
   // 修改密码
-  const formRef = ref(null)
+  const passwordFormRef = ref(null)
+  const passwordSubmitting = ref(false)
   const pwdForm = reactive({
     password: '',
     confirmPwd: '',
   })
-  const confirmValidator = (rule, value: string) => {
-    return value === pwdForm.password
-  }
-  const pwdRules = reactive({
+  const pwdRules = {
     password: [{
       required: true,
       message: '请输入新密码',
@@ -247,27 +247,34 @@
       message: '请确认新密码',
       trigger: 'blur'
     },{
-      validator: confirmValidator,
+      validator: (rule, value: string) => {
+        return value === pwdForm.password
+      },
       message: '两次密码输入不一致',
       trigger: ['input', 'blur']
     }]
-  })
+  }
   
   const submitPwd = () => {
-    formRef.value?.validate((errors) => {
-      if (!errors) {
-        instance.post('/api/user/changePassword', {
-          json: {
-            password: pwdForm.password
-          }
-        }).then(res => {
-          nMessage().success('密码修改成功')
-          console.log(res);
-          
-        })
+    passwordFormRef.value?.validate((errors) => {
+      if (errors) {
+        return
       }
+
+      passwordSubmitting.value = true
+      instance.post('/api/user/changePassword', {
+        json: {
+          password: pwdForm.password
+        }
+      }).then(res => {
+        nMessage().success('密码修改成功')
+        pwdForm.password = ''
+        pwdForm.confirmPwd = ''
+        passwordSubmitting.value = false
+      }).catch(err => {
+        passwordSubmitting.value = false
+      })
     })
   }
-  // 修改密码
 </script>
 <style scoped lang="stylus"></style>
