@@ -20,7 +20,7 @@
     options: MenuOption[] = ref([
       {
         label: () => (
-          <n-button text tag="a" href="/docs/">
+          <n-button text tag="a" href="https://wiki.emos.lol/">
             {{
               default: () => 'Wiki',
               icon: () => (
