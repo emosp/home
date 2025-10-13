@@ -41,6 +41,10 @@
     {
       "pattern": "emos.lol/server/*",
       "zone_name": "emos.lol"
+    },
+    {
+      "pattern": "emos.lol/.well-known/*",
+      "zone_name": "emos.lol"
     }
   ],
   "r2_buckets": [
