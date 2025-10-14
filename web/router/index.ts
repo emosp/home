@@ -29,6 +29,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/favorite.vue'),
   },
   {
+    path: '/tool',
+    name: 'Tool',
+    component: () => import('@/views/tool.vue'),
+  },
+  {
     path: '/oauth/:type',
     name: ROUTE_NAME_OAUTH,
     component: () => import('@/views/oauth.vue'),

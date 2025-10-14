@@ -14,7 +14,7 @@
   import signStore from '@/stores/sign.ts'
   const storeSign = signStore()
 
-  import { Github, WikipediaW, TelegramPlane, User, Home, Upload, SignOutAlt, Dove } from '@vicons/fa'
+  import { Github, WikipediaW, TelegramPlane, User, Home, Upload, SignOutAlt, Dove, Tools } from '@vicons/fa'
   import type { MenuOption } from 'naive-ui'
   const menu = ref(),
     options: MenuOption[] = ref([
@@ -126,6 +126,28 @@
           </n-button>
         ),
         key: 'home',
+        show: computed(() => storeSign.is_sign),
+      },
+      {
+        label: () => (
+          <n-button
+            text
+            onClick={() => {
+              router.push({
+                name: 'Tool',
+              })
+            }}>
+            {{
+              default: () => '工具列表',
+              icon: () => (
+                <n-icon>
+                  <Tools />
+                </n-icon>
+              ),
+            }}
+          </n-button>
+        ),
+        key: 'tool',
         show: computed(() => storeSign.is_sign),
       },
       {
