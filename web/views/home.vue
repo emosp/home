@@ -124,32 +124,18 @@
             </n-list>
           </n-collapse-item>
           <n-collapse-item title="修改密码" name="updatePassword">
-            <n-space vertical style="max-width: 400px;">
+            <n-space vertical style="max-width: 400px">
               <n-form ref="passwordFormRef" :model="pwdForm" :rules="pwdRules">
                 <n-form-item label="新密码" path="password">
-                  <n-input
-                    type="password"
-                    v-model:value="pwdForm.password"
-                    show-password-on="click"
-                    clearable
-                    placeholder="新密码"
-                  />
+                  <n-input type="password" v-model:value="pwdForm.password" show-password-on="click" clearable placeholder="新密码" />
                 </n-form-item>
                 <n-form-item label="确认密码" path="confirmPwd">
-                  <n-input
-                    type="password"
-                    v-model:value="pwdForm.confirmPwd"
-                    show-password-on="click"
-                    clearable
-                    placeholder="确认密码"
-                  />
+                  <n-input type="password" v-model:value="pwdForm.confirmPwd" show-password-on="click" clearable placeholder="确认密码" />
                 </n-form-item>
                 <n-form-item>
-                  <n-button type="tertiary" :loading="passwordSubmitting" @click="submitPwd">
-                    提交
-                  </n-button>
+                  <n-button type="tertiary" :loading="passwordSubmitting" @click="submitPwd"> 提交 </n-button>
                 </n-form-item>
-              </n-form>  
+              </n-form>
             </n-space>
           </n-collapse-item>
         </n-collapse>
@@ -223,7 +209,7 @@
       nMessage().info('加载账号中')
       oauthGet()
     }
-    if(expanded_names.includes('updatePassword')){
+    if (expanded_names.includes('updatePassword')) {
       pwdForm.password = ''
       pwdForm.confirmPwd = ''
     }
@@ -237,24 +223,29 @@
     confirmPwd: '',
   })
   const pwdRules = {
-    password: [{
-      required: true,
-      message: '请输入新密码',
-      trigger: 'blur'
-    }],
-    confirmPwd: [{
-      required: true,
-      message: '请确认新密码',
-      trigger: 'blur'
-    },{
-      validator: (rule, value: string) => {
-        return value === pwdForm.password
+    password: [
+      {
+        required: true,
+        message: '请输入新密码',
+        trigger: 'blur',
       },
-      message: '两次密码输入不一致',
-      trigger: ['input', 'blur']
-    }]
+    ],
+    confirmPwd: [
+      {
+        required: true,
+        message: '请确认新密码',
+        trigger: 'blur',
+      },
+      {
+        validator: (rule, value: string) => {
+          return value === pwdForm.password
+        },
+        message: '两次密码输入不一致',
+        trigger: ['input', 'blur'],
+      },
+    ],
   }
-  
+
   const submitPwd = () => {
     passwordFormRef.value?.validate((errors) => {
       if (errors) {
@@ -262,18 +253,21 @@
       }
 
       passwordSubmitting.value = true
-      instance.post('/api/user/changePassword', {
-        json: {
-          password: pwdForm.password
-        }
-      }).then(res => {
-        nMessage().success('密码修改成功')
-        pwdForm.password = ''
-        pwdForm.confirmPwd = ''
-        passwordSubmitting.value = false
-      }).catch(err => {
-        passwordSubmitting.value = false
-      })
+      instance
+        .post('/api/user/changePassword', {
+          json: {
+            password: pwdForm.password,
+          },
+        })
+        .then((res) => {
+          nMessage().success('密码修改成功')
+          pwdForm.password = ''
+          pwdForm.confirmPwd = ''
+          passwordSubmitting.value = false
+        })
+        .catch((err) => {
+          passwordSubmitting.value = false
+        })
     })
   }
 </script>
