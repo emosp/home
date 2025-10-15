@@ -1,11 +1,13 @@
 import { RouteRecordRaw, createRouter, createWebHashHistory } from 'vue-router'
 import signStore from '@/stores/sign.ts'
+import { nMessage } from '@/utils/naive'
 
 import view_index from '@/views/index.vue'
 import view_not_found from '@/views/404.vue'
 
 export const ROUTE_NAME_INDEX = 'Index',
-  ROUTE_NAME_OAUTH = 'Oauth'
+  ROUTE_NAME_OAUTH = 'Oauth',
+  ROUTE_NAME_LINK = 'Link'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -34,6 +36,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/tool.vue'),
   },
   {
+    path: '/link/:uuid',
+    name: ROUTE_NAME_LINK,
+    component: () => import('@/views/link.vue'),
+  },
+  {
     path: '/oauth/:type',
     name: ROUTE_NAME_OAUTH,
     component: () => import('@/views/oauth.vue'),
@@ -53,7 +60,7 @@ const router = createRouter({
 router.beforeEach(async (to, from) => {
   document.title = `${to.meta.title || ''} | emos`
 
-  if (!signStore().is_sign && ![ROUTE_NAME_INDEX, ROUTE_NAME_OAUTH].includes(to.name)) {
+  if (!signStore().is_sign && ![ROUTE_NAME_INDEX, ROUTE_NAME_OAUTH, ROUTE_NAME_LINK].includes(to.name)) {
     return {
       name: ROUTE_NAME_INDEX,
       replace: true,
