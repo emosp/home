@@ -44,6 +44,7 @@
   import instance from '@/utils/ky'
   import { nMessage } from '@/utils/naive'
   import { Oauths } from '@/utils/oauth'
+  import { ROUTE_NAME_LINK } from '@/router'
 
   import { useRoute, useRouter } from 'vue-router'
   const router = useRouter(),
@@ -128,9 +129,17 @@
 
             storeSign.show = false
 
-            await router.push({
-              name: 'Home',
-            })
+            switch (route.name) {
+              case ROUTE_NAME_LINK:
+                // todo: 优雅的实现
+                window.location.reload()
+                break
+              default:
+                await router.push({
+                  name: 'Home',
+                })
+                break
+            }
           } else {
             nMessage().error('密码错误')
           }
