@@ -108,17 +108,7 @@
               <n-list-item>
                 <n-thing title="为什么资源这么少">
                   定位是追新 如果等不及了可以自己来
-                  <n-button
-                    text
-                    @click="
-                      () => {
-                        router.push({
-                          name: 'Upload',
-                        })
-                      }
-                    ">
-                    上传
-                  </n-button>
+                  <n-button text tag="a" href="https://uploader.emos.lol" target="_blank"> 上传 </n-button>
                 </n-thing>
               </n-list-item>
             </n-list>

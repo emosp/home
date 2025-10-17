@@ -86,13 +86,7 @@
       },
       {
         label: () => (
-          <n-button
-            text
-            onClick={() => {
-              router.push({
-                name: 'Upload',
-              })
-            }}>
+          <n-button text tag="a" target="_blank" href="https://uploader.emos.lol">
             {{
               default: () => '上传资源',
               icon: () => (
@@ -104,7 +98,7 @@
           </n-button>
         ),
         key: 'upload',
-        show: false,
+        show: computed(() => storeSign.is_sign),
       },
       {
         label: () => (
