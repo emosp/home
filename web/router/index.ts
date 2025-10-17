@@ -21,11 +21,6 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/home.vue'),
   },
   {
-    path: '/upload',
-    name: 'Upload',
-    component: () => import('@/views/upload.vue'),
-  },
-  {
     path: '/favorite',
     name: 'Favorite',
     component: () => import('@/views/favorite.vue'),
