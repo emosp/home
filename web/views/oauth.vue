@@ -48,11 +48,12 @@
           json: oauth_data,
         })
         .then(async (res) => {
-          let data: { token?: string; username?: string } = await res.json(),
+          let data: { token?: string; username?: string; avatar?: string } = await res.json(),
             token = data.token,
-            username = data.username
+            username = data.username,
+            avatar = data.avatar
           if (token) {
-            storeSign.signEntry(username, token)
+            storeSign.signEntry(username, avatar, token)
             nMessage().success(`欢迎回来 ${username}`, {
               showIcon: false,
             })

@@ -18,13 +18,15 @@ export default defineStore(
 
     const user_token = ref(),
       user_username = ref(),
+      user_avatar = ref(),
       is_sign = computed(() => Boolean(user_token.value))
 
     const tokenRemove = () => {
         user_token.value = null
       },
-      signEntry = (username: string, token: string) => {
+      signEntry = (username: string, avatar: string, token: string) => {
         user_username.value = username
+        user_avatar.value = avatar
         user_token.value = token
       },
       signOut = async () => {
@@ -41,6 +43,7 @@ export default defineStore(
       show,
       user_token,
       user_username,
+      user_avatar,
       is_sign,
       showEntry,
       signEntry,
@@ -50,7 +53,7 @@ export default defineStore(
   },
   {
     persist: {
-      pick: ['user_token', 'user_username'],
+      pick: ['user_token', 'user_username', 'user_avatar'],
     },
   },
 )
