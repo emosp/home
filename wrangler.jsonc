@@ -35,10 +35,6 @@
       "zone_name": "emos.lol"
     },
     {
-      "pattern": "emos.lol/docs/*",
-      "zone_name": "emos.lol"
-    },
-    {
       "pattern": "emos.lol/server/*",
       "zone_name": "emos.lol"
     },

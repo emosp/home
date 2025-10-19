@@ -119,9 +119,9 @@
           json: form_data.value,
         })
         .then(async (res) => {
-          let { token } = await res.json()
+          let { avatar, token } = await res.json()
           if (token) {
-            storeSign.signEntry(username, token)
+            storeSign.signEntry(username, avatar, token)
 
             nMessage().success(`欢迎回来 ${username}`, {
               showIcon: false,

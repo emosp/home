@@ -43,7 +43,7 @@
     nMessage().error('请登录后再访问')
     storeSign.showEntry()
   } else {
-    link_to.value = `${route.query.url}?username=${storeSign.user_username}&token=${storeSign.user_token}`
+    link_to.value = `${route.query.url}?username=${storeSign.user_username}&avatar=${storeSign.user_avatar}&token=${storeSign.user_token}`
   }
 </script>
 <style scoped lang="stylus"></style>
