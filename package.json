@@ -9,10 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && $npm_execpath run docs:build",
-    "deploy": "$npm_execpath run build && wrangler deploy --var VERSION:$(git rev-parse --short HEAD)",
-    "docs:dev": "vitepress dev",
-    "docs:build": "vitepress build",
-    "docs:preview": "vitepress preview"
+    "deploy": "$npm_execpath run build && wrangler deploy --var VERSION:$(git rev-parse --short HEAD)"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.12",
@@ -42,7 +39,6 @@
     "stylus": "^0.64.0",
     "typescript": "~5.8.3",
     "vite": "^7.1.3",
-    "vitepress": "2.0.0-alpha.12",
     "vue-tsc": "^3.0.6",
     "wrangler": "^4.33.1"
   }
