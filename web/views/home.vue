@@ -128,6 +128,13 @@
               </n-form>
             </n-space>
           </n-collapse-item>
+          <n-collapse-item title="其他线路" name="line">
+            <n-list>
+              <n-list-item>
+                <n-thing title="感谢 @Mawu_cu 提供地址"> https://emos.dolby.dpdns.org </n-thing>
+              </n-list-item>
+            </n-list>
+          </n-collapse-item>
         </n-collapse>
       </template>
     </n-card>
