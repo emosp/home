@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && $npm_execpath run docs:build",
+    "build": "vite build",
     "deploy": "$npm_execpath run build && wrangler deploy --var VERSION:$(git rev-parse --short HEAD)"
   },
   "dependencies": {
