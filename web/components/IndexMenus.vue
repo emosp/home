@@ -62,7 +62,7 @@
           </n-button>
         ),
         key: 'telegram',
-        show: false,
+        show: computed(() => storeSign.is_sign),
       },
       {
         label: () => (
