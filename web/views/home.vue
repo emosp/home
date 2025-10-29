@@ -54,6 +54,7 @@
             <template #description>
               <p>使用注册时用户名密码登录</p>
               <p>不删档内测中 不限客户端 无须保号</p>
+              <p>如果主线路卡顿 可选择 <n-button text tag="a" href="https://wiki.emos.lol/proxy.html" target="_blank"> 其他线路 </n-button></p>
             </template>
           </n-thing>
         </n-list-item>
@@ -127,13 +128,6 @@
                 </n-form-item>
               </n-form>
             </n-space>
-          </n-collapse-item>
-          <n-collapse-item title="其他线路" name="line">
-            <n-list>
-              <n-list-item>
-                <n-thing title="感谢 @Mawu_cu 提供地址"> https://emos.dolby.dpdns.org </n-thing>
-              </n-list-item>
-            </n-list>
           </n-collapse-item>
         </n-collapse>
       </template>
