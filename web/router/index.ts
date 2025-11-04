@@ -41,6 +41,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/oauth.vue'),
   },
   {
+    path: '/private',
+    name: 'Private',
+    component: () => import('@/views/private.vue'),
+  },
+  {
     path: '/:pathMatch(.*)*',
     name: 'NotFound',
     component: view_not_found,

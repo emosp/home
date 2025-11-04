@@ -63,6 +63,17 @@
     <div class="absolute w-full bottom-1 text-center">
       © {{ dayjs().format('YYYY') }}
       <a href="/">{{ domain }}</a>
+      <span class="ml-1">
+        <n-button
+          text
+          @click="
+            router.push({
+              name: 'Private',
+            })
+          ">
+          隐私策略
+        </n-button>
+      </span>
     </div>
   </div>
 </template>
