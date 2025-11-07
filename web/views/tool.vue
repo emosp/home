@@ -16,6 +16,12 @@
           <n-button tag="a" target="_blank" href="/api/tool/getOneDriveToken">点击获取</n-button>
         </template>
       </n-list-item>
+      <n-list-item>
+        <n-thing title="GoogleDrive" description="获取 refresh_token" />
+        <template #suffix>
+          <n-button tag="a" target="_blank" href="/api/tool/getGoogleDriveToken">点击获取</n-button>
+        </template>
+      </n-list-item>
     </n-list>
   </div>
 </template>
