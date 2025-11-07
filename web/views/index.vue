@@ -27,9 +27,9 @@
       </div>
     </nav>
     <div class="main absolute top-0 left-0 right-0 z-10 pt-60 px-4 md:px-6 text-center md:text-left md:ml-40 lg:ml-64">
-      <span class="inline-block px-3 py-1 rounded-full text-sm mb-4"> 
+      <span class="inline-block px-3 py-1 rounded-full text-sm mb-4">
         欢迎来到 基于
-        <n-button text tag="a" href="https://github.com/emosp/emya" target="_blank" type="primary">emya</n-button> 
+        <n-button text tag="a" href="https://github.com/emosp/emya" target="_blank" type="primary">emya</n-button>
         的 emos
       </span>
       <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
@@ -64,15 +64,7 @@
       © {{ dayjs().format('YYYY') }}
       <a href="/">{{ domain }}</a>
       <span class="ml-1">
-        <n-button
-          text
-          @click="
-            router.push({
-              name: 'Private',
-            })
-          ">
-          隐私策略
-        </n-button>
+        <n-button tag="a" text target="_blank" href="/private"> 隐私策略 </n-button>
       </span>
     </div>
   </div>
@@ -117,7 +109,7 @@
   backgroundMatch()
 
   const waiting_number = Array.from({
-    length: Math.floor(Math.random() * 10)
+    length: Math.floor(Math.random() * 10),
   })
 
   const domain = window.location.host

@@ -31,6 +31,10 @@
       "zone_name": "emos.lol"
     },
     {
+      "pattern": "emos.lol/private",
+      "zone_name": "emos.lol"
+    },
+    {
       "pattern": "emos.lol/assets/*",
       "zone_name": "emos.lol"
     },
