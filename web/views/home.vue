@@ -86,7 +86,7 @@
                 </template>
                 确认解绑?
               </n-popconfirm>
-              <n-button v-else block secondary strong tag="a" :href="oauth.url">
+              <n-button v-else block secondary strong tag="a" :href="oauth_binds[oauth.type] || oauth.url">
                 <template #icon>
                   <component v-if="oauth.logo_component" :is="oauth.logo_component" />
                   <img v-else :src="oauth.logo" />
@@ -176,8 +176,11 @@
     }
 
   const oauth_datas = ref({}),
+    oauth_binds = ref({}),
     oauthGet = async () => {
-      oauth_datas.value = await instance.get('/api/oauth').json()
+      let data = await instance.get('/api/oauth').json()
+      oauth_datas.value = data.lists
+      oauth_binds.value = data.binds
     },
     oauthUnbind = async (type: string) => {
       await instance

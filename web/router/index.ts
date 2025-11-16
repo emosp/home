@@ -31,6 +31,11 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/tool.vue'),
   },
   {
+    path: '/new_video',
+    name: 'NewVideo',
+    component: () => import('@/views/new_video.vue'),
+  },
+  {
     path: '/link/:uuid',
     name: ROUTE_NAME_LINK,
     component: () => import('@/views/link.vue'),
