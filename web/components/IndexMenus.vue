@@ -14,7 +14,7 @@
   import signStore from '@/stores/sign.ts'
   const storeSign = signStore()
 
-  import { Github, WikipediaW, TelegramPlane, User, Home, Upload, SignOutAlt, Dove, Tools } from '@vicons/fa'
+  import { Github, WikipediaW, TelegramPlane, User, Home, Upload, SignOutAlt, Dove, Tools, Video } from '@vicons/fa'
   import type { MenuOption } from 'naive-ui'
   const menu = ref(),
     options: MenuOption[] = ref([
@@ -98,6 +98,28 @@
           </n-button>
         ),
         key: 'upload',
+        show: computed(() => storeSign.is_sign),
+      },
+      {
+        label: () => (
+          <n-button
+            text
+            onClick={() => {
+              router.push({
+                name: 'NewVideo',
+              })
+            }}>
+            {{
+              default: () => '新建影视',
+              icon: () => (
+                <n-icon>
+                  <Video />
+                </n-icon>
+              ),
+            }}
+          </n-button>
+        ),
+        key: 'new_video',
         show: computed(() => storeSign.is_sign),
       },
       {
