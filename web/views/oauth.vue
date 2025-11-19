@@ -62,7 +62,7 @@
               name: 'Home',
             })
           } else {
-            nMessage().error('请先绑定账号后再使用快捷登录', {
+            nMessage().error('请先注册并在个人中心绑定账号后再使用快捷登录', {
               duration: 1000 * 5,
             })
             await router.replace({
