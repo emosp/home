@@ -131,7 +131,7 @@
             text
             onClick={() => {
               router.push({
-                name: 'Favorite',
+                name: 'Seek',
               })
             }}>
             {{

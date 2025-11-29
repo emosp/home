@@ -21,9 +21,9 @@ const routes: RouteRecordRaw[] = [
     component: () => import('@/views/home.vue'),
   },
   {
-    path: '/favorite',
-    name: 'Favorite',
-    component: () => import('@/views/favorite.vue'),
+    path: '/seek',
+    name: 'Seek',
+    component: () => import('@/views/seek.vue'),
   },
   {
     path: '/tool',
