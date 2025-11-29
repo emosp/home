@@ -30,7 +30,8 @@
       <span class="inline-block px-3 py-1 rounded-full text-sm mb-4">
         欢迎来到 基于
         <n-button text tag="a" href="https://github.com/emosp/emya" target="_blank" type="primary">emya</n-button>
-        的 emos
+        的
+        <n-button text tag="a" href="http://github.com/emosp/home" target="_blank">emos</n-button>
       </span>
       <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-4">
         新服开测 一起玩呀
