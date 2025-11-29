@@ -29,6 +29,7 @@
 <script setup lang="tsx">
   import type { DataTableColumns } from 'naive-ui'
   import { ROUTE_NAME_INDEX } from '@/router'
+  import { useClipboard } from '@vueuse/core'
   import { ref } from 'vue'
   import instance from '@/utils/ky'
   import { dayjs } from '@common/dayjs'
@@ -65,12 +66,23 @@
     columns: DataTableColumns = [
       {
         key: 'video_type',
-        title: '类型',
-        width: 80,
+        title: 'ID',
+        width: 120,
         filter: true,
         filterMultiple: false,
         filterOptions: objectToLabelValue(DICT_VIDEO_TYPES),
-        render: (row) => DICT_VIDEO_TYPES[row.video_type],
+        render: (row) => (
+          <n-button
+            text
+            type="primary"
+            onClick={() => {
+              let { copy } = useClipboard()
+              copy(row.item_id)
+              nMessage().success('复制成功')
+            }}>
+            {row.item_id}
+          </n-button>
+        ),
       },
       {
         key: 'video_title',
