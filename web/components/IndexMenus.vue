@@ -35,21 +35,6 @@
       },
       {
         label: () => (
-          <n-button text tag="a" target="_blank" href="http://github.com/emosp/home">
-            {{
-              default: () => 'GitHub',
-              icon: () => (
-                <n-icon>
-                  <Github />
-                </n-icon>
-              ),
-            }}
-          </n-button>
-        ),
-        key: 'github',
-      },
-      {
-        label: () => (
           <n-button text tag="a" target="_blank" href="https://t.me/emospg">
             {{
               default: () => 'Telegram',
@@ -86,7 +71,7 @@
       },
       {
         label: () => (
-          <n-button text tag="a" target="_blank" href="https://uploader.emos.lol">
+          <n-button text>
             {{
               default: () => '上传资源',
               icon: () => (
@@ -99,6 +84,24 @@
         ),
         key: 'upload',
         show: computed(() => storeSign.is_sign),
+        children: [
+          {
+            key: 'upload_batch',
+            label: () => (
+              <n-button text size="medium" tag="a" target="_blank" href="https://emos.prlo.de">
+                批量上传
+              </n-button>
+            ),
+          },
+          {
+            key: 'upload_one',
+            label: () => (
+              <n-button text size="medium" tag="a" target="_blank" href="https://uploader.emos.lol">
+                单个上传
+              </n-button>
+            ),
+          },
+        ],
       },
       {
         label: () => (
