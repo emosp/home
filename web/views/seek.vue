@@ -160,51 +160,55 @@
         key: 'action',
         title: '操作',
         minWidth: 200,
-        render: (row) => (
-          <n-button-group>
-            <n-popconfirm onPositiveClick={() => seekUrge(row, 10)} disabled={row.urge_loading}>
-              {{
-                default: () => '将使用10胡萝卜催上片',
-                trigger: () => (
-                  <div class="mr-1">
-                    <n-button loading={row.urge_loading} tertiary type="primary">
-                      催上片
-                    </n-button>
-                  </div>
-                ),
-              }}
-            </n-popconfirm>
-            {row.is_can_claim ? (
-              row.upload_username ? (
-                <n-popconfirm onPositiveClick={() => seekClaim(row, 'cancel')} disabled={row.claim_loading}>
+        render: (row) => {
+          if (['default', 'upload', 'forget'].includes(row.status)) {
+            return (
+              <n-button-group>
+                <n-popconfirm onPositiveClick={() => seekUrge(row, 10)} disabled={row.urge_loading}>
                   {{
-                    default: () => '取消认领此上传任务',
+                    default: () => '将使用10胡萝卜催上片',
                     trigger: () => (
-                      <n-button loading={row.claim_loading} tertiary type="warning">
-                        取消认领
-                      </n-button>
+                      <div class="mr-1">
+                        <n-button loading={row.urge_loading} tertiary type="primary">
+                          催上片
+                        </n-button>
+                      </div>
                     ),
                   }}
                 </n-popconfirm>
-              ) : (
-                <n-popconfirm onPositiveClick={() => seekClaim(row, 'confirm')} disabled={row.claim_loading}>
-                  {{
-                    default: () => '确认认领此上传任务',
-                    trigger: () => (
-                      <n-button loading={row.claim_loading} tertiary type="info">
-                        认领
-                      </n-button>
-                    ),
-                  }}
-                </n-popconfirm>
-              )
-            ) : (
-              <n-button disabled tertiary type="info">
-                {dayjs(row.upload_expired_at).toNow()} 后可认领
-              </n-button>
-            )}
-          </n-button-group>
-        ),
+                {row.is_can_claim ? (
+                  row.upload_username ? (
+                    <n-popconfirm onPositiveClick={() => seekClaim(row, 'cancel')} disabled={row.claim_loading}>
+                      {{
+                        default: () => '取消认领此上传任务',
+                        trigger: () => (
+                          <n-button loading={row.claim_loading} tertiary type="warning">
+                            取消认领
+                          </n-button>
+                        ),
+                      }}
+                    </n-popconfirm>
+                  ) : (
+                    <n-popconfirm onPositiveClick={() => seekClaim(row, 'confirm')} disabled={row.claim_loading}>
+                      {{
+                        default: () => '确认认领此上传任务',
+                        trigger: () => (
+                          <n-button loading={row.claim_loading} tertiary type="info">
+                            认领
+                          </n-button>
+                        ),
+                      }}
+                    </n-popconfirm>
+                  )
+                ) : (
+                  <n-button disabled tertiary type="info">
+                    {dayjs(row.upload_expired_at).fromNow(true)} 后可认领
+                  </n-button>
+                )}
+              </n-button-group>
+            )
+          }
+        },
       },
     ],
     datas = ref([]),
