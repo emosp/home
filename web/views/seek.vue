@@ -121,7 +121,7 @@
         ),
       },
       {
-        key: 'count_point',
+        key: 'seek_carrot',
         title: '悬赏胡萝卜',
         width: 120,
         sorter: true,
@@ -258,7 +258,7 @@
       width: 160,
     },
     {
-      key: 'point',
+      key: 'carrot',
       title: '支付胡萝卜',
       width: 100,
     },
@@ -273,7 +273,7 @@
     instance
       .put('/api/seek/claim', {
         json: {
-          id: row.id,
+          seek_id: row.id,
           type,
         },
       })
@@ -294,18 +294,18 @@
       })
   }
 
-  const seekUrge = (row, point) => {
+  const seekUrge = (row, carrot) => {
     row.urge_loading = true
     instance
       .put('/api/seek/urge', {
         json: {
-          id: row.id,
-          point,
+          seek_id: row.id,
+          carrot,
         },
       })
       .then(async (res) => {
-        let { count_point } = await res.json()
-        row.count_point = count_point
+        let { seek_carrot } = await res.json()
+        row.seek_carrot = seek_carrot
         nMessage().success('催促成功')
       })
       .finally(() => {
