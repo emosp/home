@@ -1,6 +1,6 @@
 <template>
   <div class="home p-40 max-sm:p-10">
-    <n-card title="欢迎">
+    <n-card :title="`欢迎 ${data.email || ''}`">
       <template #header-extra>
         <n-button
           text
@@ -94,6 +94,22 @@
                 绑定 {{ oauth.label }}
               </n-button>
             </div>
+          </n-collapse-item>
+          <n-collapse-item title="绑定邮箱" name="email" v-if="!data.email">
+            <n-space vertical style="max-width: 400px">
+              <n-form ref="email_ref" :model="email_data" :rules="email_rules">
+                <n-form-item label="邮箱" path="email">
+                  <n-input type="text" v-model:value="email_data.email" placeholder="请输入邮箱" clearable />
+                </n-form-item>
+                <n-form-item label="验证码" path="code">
+                  <n-input type="text" v-model:value="email_data.code" placeholder="请输入验证码" clearable />
+                  <n-button style="margin-left: 12px" @click="emailCodeGet" :loading="email_code_loading" :disabled="Boolean(email_code_waiting)">
+                    {{ email_code_waiting ? `${email_code_waiting}s后重试` : '获取验证码' }}
+                  </n-button>
+                </n-form-item>
+                <n-button :loading="email_submit_loading" @click="emailSubmit"> 提交 </n-button>
+              </n-form>
+            </n-space>
           </n-collapse-item>
           <n-collapse-item title="常见问题" name="qa">
             <n-list>
@@ -208,6 +224,92 @@
       pwdForm.confirmPwd = ''
     }
   }
+
+  const email_ref = ref<FormInst | null>(null),
+    email_data = ref<form_data>({
+      email: '',
+      code: '',
+    }),
+    email_rules: FormRules = {
+      email: [
+        {
+          required: true,
+          message: '请输入邮箱啊',
+          trigger: ['input', 'blur'],
+        },
+        {
+          message: '感觉输入的不太对',
+          type: 'email',
+          trigger: ['input', 'blur'],
+        },
+      ],
+      code: [
+        {
+          required: true,
+          message: '请输入验证码呀',
+          trigger: ['input', 'blur'],
+        },
+      ],
+    },
+    email_submit_loading = ref(false),
+    email_code_loading = ref(false),
+    email_code_waiting = ref(0),
+    emailCodeGet = async () => {
+      await email_ref.value.validate(
+        (error) => {},
+        (rule) => {
+          return rule.type == 'email'
+        },
+      )
+
+      let email = email_data.value.email
+      if (!email) {
+        nMessage().error('要输入邮箱')
+        return
+      }
+
+      email_code_loading.value = false
+      await instance
+        .post('api/email/send', {
+          json: {
+            email,
+          },
+        })
+        .then(() => {
+          nMessage().success('验证码发送成功')
+        })
+        .finally(() => {
+          email_code_loading.value = false
+        })
+
+      email_data.value.email_code = null
+      email_code_waiting.value = 59
+
+      let timer = setInterval(() => {
+        if (email_code_waiting.value < 1) {
+          clearInterval(timer)
+          email_code_waiting.value = 0
+        } else {
+          email_code_waiting.value--
+        }
+      }, 1000)
+    },
+    emailSubmit = async () => {
+      await email_ref.value.validate()
+      email_submit_loading.value = true
+      await instance
+        .post('api/email/bind', {
+          json: email_data.value,
+        })
+        .then(() => {
+          nMessage().success('绑定成功')
+          data.value.email = email_data.value.email
+        })
+        .finally(() => {
+          email_submit_loading.value = false
+          email_data.value.code = ''
+        })
+    }
 
   // 修改密码
   const passwordFormRef = ref(null)
