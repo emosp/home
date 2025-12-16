@@ -111,6 +111,19 @@
               </n-form>
             </n-space>
           </n-collapse-item>
+          <n-collapse-item title="修改密码" name="updatePassword">
+            <n-space vertical style="max-width: 400px">
+              <n-form ref="passwordFormRef" :model="pwdForm" :rules="pwdRules">
+                <n-form-item label="新密码" path="password">
+                  <n-input type="password" v-model:value="pwdForm.password" show-password-on="click" clearable placeholder="新密码" />
+                </n-form-item>
+                <n-form-item label="确认密码" path="confirmPwd">
+                  <n-input type="password" v-model:value="pwdForm.confirmPwd" show-password-on="click" clearable placeholder="确认密码" />
+                </n-form-item>
+                <n-button :loading="passwordSubmitting" @click="submitPwd"> 提交 </n-button>
+              </n-form>
+            </n-space>
+          </n-collapse-item>
           <n-collapse-item title="常见问题" name="qa">
             <n-list>
               <n-list-item>
@@ -129,21 +142,6 @@
                 </n-thing>
               </n-list-item>
             </n-list>
-          </n-collapse-item>
-          <n-collapse-item title="修改密码" name="updatePassword">
-            <n-space vertical style="max-width: 400px">
-              <n-form ref="passwordFormRef" :model="pwdForm" :rules="pwdRules">
-                <n-form-item label="新密码" path="password">
-                  <n-input type="password" v-model:value="pwdForm.password" show-password-on="click" clearable placeholder="新密码" />
-                </n-form-item>
-                <n-form-item label="确认密码" path="confirmPwd">
-                  <n-input type="password" v-model:value="pwdForm.confirmPwd" show-password-on="click" clearable placeholder="确认密码" />
-                </n-form-item>
-                <n-form-item>
-                  <n-button type="tertiary" :loading="passwordSubmitting" @click="submitPwd"> 提交 </n-button>
-                </n-form-item>
-              </n-form>
-            </n-space>
           </n-collapse-item>
         </n-collapse>
       </template>
