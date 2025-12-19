@@ -26,7 +26,7 @@
             <n-input v-model:value="form_data.video_title" type="text" placeholder="请输入剧名" :maxlength="50" clearable />
           </n-form-item>
           <n-form-item label="简介" path="video_description">
-            <n-input v-model:value="form_data.video_description" type="textarea" placeholder="请输入描述啥的" :maxlength="200" show-count clearable />
+            <n-input v-model:value="form_data.video_description" type="textarea" placeholder="请输入描述啥的" :maxlength="500" show-count clearable />
           </n-form-item>
           <n-form-item label="封面图" path="cover_id" v-if="form_data.library_id">
             <n-upload
