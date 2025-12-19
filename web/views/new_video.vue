@@ -15,7 +15,7 @@
         </n-button>
       </template>
       <template #default>
-        <p>仅在 <n-button text tag="a" href="https://www.themoviedb.org" target="_blank"> tmdb </n-button> 无内容时使用</p>
+        <p>仅在 <n-button text tag="a" href="https://www.themoviedb.org" target="_blank"> tmdb </n-button> 无内容时上传电影使用, 非求片区.</p>
         <br />
         <n-form ref="form_ref" :model="form_data" :rules="form_rules" label-placement="left" :label-width="80">
           <n-form-item label="媒体库" path="library_id">
