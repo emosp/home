@@ -1,6 +1,9 @@
 <template>
   <div class="home p-40 max-sm:p-10">
-    <n-card :title="`欢迎 ${data.email || ''}`">
+    <n-card>
+      <template #header>
+        <p @click="copyUserId">{{ data.user_roles_string || '欢迎' }}</p>
+      </template>
       <template #header-extra>
         <n-button
           text
@@ -16,48 +19,32 @@
       </template>
       <n-list>
         <template #header>
-          <code class="text-4xl overflow-hidden text-ellipsis">
-            {{ storeSign.user_username }}
-          </code>
+          <p>欢迎来到 emos 本服完全免费 欢迎体验</p>
+          <p>感谢 Zn存档服、yzhazha、jack_cco、Love_benghuai3、ForAllDreams、miaojun 等大力支持</p>
         </template>
         <template #footer>
-          <p>
-            求片或意见反馈等请提
-            <n-button text tag="a" href="http://github.com/emosp/home/issues" target="_blank"> issues </n-button>
-          </p>
-          <p class="mt-1">
-            感谢 <n-button text tag="a" href="https://pan.8897122.xyz/" target="_blank"> <span class="font-bold">Zn存档服</span> </n-button> 大力支持
-          </p>
-          <p class="mt-1">
-            感谢 <n-button text tag="a" href="https://t.me/nyamedia_chat" target="_blank"> <span class="font-bold">Nya</span> </n-button> 大力支持
-          </p>
-          <p class="mt-1">
-            感谢 <n-button text tag="a" href="https://t.me/yangzhazha_bot" target="_blank"> <span class="font-bold">yangzhazha</span> </n-button> 大力支持
-          </p>
+          <n-skeleton v-if="loading" text :repeat="3" />
+          <div v-else>
+            <p>
+              地址:
+              <code>{{ data.emby_url }}</code>
+            </p>
+            <p>
+              端口:
+              <code>443</code>
+            </p>
+            <p>
+              账号: <code>{{ storeSign.user_username }}</code>
+            </p>
+            <p>
+              密码:
+              <template v-if="data.must_otp">
+                <n-button quaternary size="small" type="primary" @click="getLoginPassword" :loading="login_password_loading"> 点击获取 </n-button>
+              </template>
+              <template v-else> 当前账号密码 </template>
+            </p>
+          </div>
         </template>
-        <n-list-item>
-          <n-thing>
-            <template #header>
-              <div
-                :style="{
-                  display: loading ? 'unset' : 'flex',
-                }">
-                <p>登录域名:</p>
-                <div class="ml-2">
-                  <n-skeleton v-if="loading" text :repeat="1" />
-                  <p v-else>
-                    <code>{{ data.emby_url }}</code>
-                  </p>
-                </div>
-              </div>
-            </template>
-            <template #description>
-              <p>使用注册时用户名密码登录</p>
-              <p>不删档内测中 不限客户端 无须保号</p>
-              <p>如果主线路卡顿 可选择 <n-button text tag="a" href="https://wiki.emos.lol/proxy.html" target="_blank"> 其他线路 </n-button></p>
-            </template>
-          </n-thing>
-        </n-list-item>
       </n-list>
       <template #footer>
         <n-collapse @update:expanded-names="collapseExpanded" accordion>
@@ -124,49 +111,97 @@
               </n-form>
             </n-space>
           </n-collapse-item>
-          <n-collapse-item title="常见问题" name="qa">
-            <n-list>
-              <n-list-item>
-                <n-thing title="为什么播放无时常 视频无参数等"> 目前正在思考如何搞定扫库问题 </n-thing>
-              </n-list-item>
-              <n-list-item>
-                <n-thing title="为什么这么卡">
-                  如果是页面卡请耐心多给他点时间 如果视频播放卡请提
-                  <n-button text tag="a" href="http://github.com/emosp/home/issues" target="_blank"> issues </n-button>
-                </n-thing>
-              </n-list-item>
-              <n-list-item>
-                <n-thing title="为什么资源这么少">
-                  定位是追新 如果等不及了可以自己来
-                  <n-button text tag="a" href="https://uploader.emos.lol" target="_blank"> 上传 </n-button>
-                </n-thing>
-              </n-list-item>
-            </n-list>
-          </n-collapse-item>
         </n-collapse>
       </template>
     </n-card>
   </div>
 </template>
 <script setup lang="ts">
+  import { useClipboard } from '@vueuse/core'
   import { ref, reactive } from 'vue'
   import { useRouter } from 'vue-router'
   import instance from '@/utils/ky'
   import signStore from '@/stores/sign.ts'
-  import { nMessage } from '@/utils/naive'
+  import { nDialog, nMessage } from '@/utils/naive'
   import { Oauths } from '@/utils/oauth'
   const storeSign = signStore(),
     router = useRouter()
+
+  const USER_ROLES = {
+    user_admin: '管理员',
+    user_special: '特邀用户',
+    user_developer: '开发者',
+  }
 
   const loading = ref(true),
     data = ref({}),
     getData = async () => {
       loading.value = true
-      data.value = await instance.get('/api/home').json()
+
+      let res = await instance.get('/api/home').json()
+
+      let user_roles_string = []
+
+      for (let role of res.roles) {
+        let user_role_string = USER_ROLES[role]
+        if (user_role_string) {
+          user_roles_string.push(user_role_string)
+        }
+      }
+
+      data.value = {
+        ...res,
+        user_roles_string: user_roles_string.join('、'),
+      }
+
       loading.value = false
     }
 
   getData()
+
+  const copyUserId = () => {
+    if (loading.value) {
+      return
+    }
+    let user_id = data.value.user_id
+    let { copy } = useClipboard()
+    nDialog().success({
+      title: `用户ID: ${user_id}`,
+      showIcon: false,
+      positiveText: '点击复制',
+      onPositiveClick: () => {
+        copy(user_id)
+        nMessage().success('复制成功')
+      },
+    })
+  }
+
+  const login_password_loading = ref(false),
+    getLoginPassword = () => {
+      login_password_loading.value = true
+      instance
+        .get('/api/emya/getLoginPassword')
+        .then(async (res) => {
+          let { password, second } = await res.json()
+          if (password) {
+            let { copy } = useClipboard()
+            nDialog().success({
+              title: `一次性登录密码为: ${password}, ${second}秒内有效`,
+              showIcon: false,
+              positiveText: '点击复制',
+              onPositiveClick: () => {
+                copy(password)
+                nMessage().success('复制成功')
+              },
+            })
+          } else {
+            nMessage().success('您可以直接使用当前账号密码进行登录')
+          }
+        })
+        .finally(() => {
+          login_password_loading.value = false
+        })
+    }
 
   const library_datas = ref([]),
     libraryGet = async () => {
