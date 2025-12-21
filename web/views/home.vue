@@ -131,6 +131,8 @@
     user_admin: '管理员',
     user_special: '特邀用户',
     user_developer: '开发者',
+    user_sponsor: '赞助者',
+    user_peer: '同行',
   }
 
   const loading = ref(true),
